@@ -9,6 +9,9 @@
 #include "vm/vm.h"
 #endif
 
+// pml4 추가
+#define USERPROG
+
 /* States in a thread's life cycle. */
 enum thread_status
 {
