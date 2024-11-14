@@ -186,13 +186,27 @@ int process_exec(void *f_name)
 	_if.eflags = FLAG_IF | FLAG_MBS;
 
 	/* We first kill the current context */
+	// 현재 프로세스에 할당된 page directory를 지운다.
 	process_cleanup();
 
+	// 문자열 분리
+	strcpy(file_name_array, file_name);
+	ptr = &file_name_array;
+	for (arg = strtok_r(file_name_array, ' ', &ptr); arg != NULL; arg = strtok_r(NULL, ' ', &ptr))
+	{
+		arg_list[arg_cnt++] = arg;
+	}
+
 	/* And then load the binary */
-	success = load(file_name, &_if);
+	success = load(arg_list[0], &_if); // arg_list[0]을 파일 이름으로 사용
+
+	argument_stack(arg_list, arg_cnt, &_if);
+
+	// Command Line Parsing - 디버깅용툴
+	hex_dump(_if.rsp, _if.rsp, KERN_BASE - _if.rsp, true);
 
 	/* If load failed, quit. */
-	palloc_free_page(file_name);
+	palloc_free_page(arg_list[0]);
 	if (!success)
 		return -1;
 
