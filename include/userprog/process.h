@@ -10,7 +10,4 @@ int process_wait(tid_t);
 void process_exit(void);
 void process_activate(struct thread *next);
 
-// Command Line Parsing
-void argument_stack(char **argv, int argc, void **rsp);
-
 #endif /* userprog/process.h */
