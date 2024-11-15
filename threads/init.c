@@ -77,6 +77,12 @@ main (void) {
 	argv = read_command_line ();
 	argv = parse_options (argv);
 
+
+	// *argv = [run, arg-single oneargs] 
+	printf("✨argv : %s\n",*(argv));  // run
+	printf("✨argv : %s\n",*(argv+1)); // arg-single oneargs
+	
+
 	/* Initialize ourselves as a thread so we can use locks,
 	   then enable console locking. */
 	thread_init ();
@@ -119,7 +125,8 @@ main (void) {
 	printf ("Boot complete.\n");
 
 	/* Run actions specified on kernel command line. */
-	run_actions (argv);
+	run_actions (argv);  	// *argv = [run, arg-single oneargs] 
+
 
 	/* Finish up. */
 	if (power_off_when_done)
@@ -266,7 +273,7 @@ run_actions (char **argv) {
 	/* Table of supported actions. */
 	static const struct action actions[] = {
 		{"run", 2, run_task},
-#ifdef FILESYS
+#ifdef FILESYSs
 		{"ls", 1, fsutil_ls},
 		{"cat", 2, fsutil_cat},
 		{"rm", 2, fsutil_rm},
@@ -296,7 +303,6 @@ run_actions (char **argv) {
 		a->function (argv);
 		argv += a->argc;
 	}
-
 }
 
 /* Prints a kernel command line help message and powers off the

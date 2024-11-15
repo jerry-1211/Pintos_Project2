@@ -188,7 +188,7 @@ void thread_print_stats(void)
 void thread_test_preemption(void)
 {
 	if (!list_empty(&ready_list) && thread_current()->priority < list_entry(list_front(&ready_list), struct thread, elem)->priority){
-		  if (intr_context())
+		if (intr_context())
             intr_yield_on_return();
         else
 			thread_yield();
@@ -196,8 +196,7 @@ void thread_test_preemption(void)
 		
 }
 
-tid_t thread_create(const char *name, int priority,
-					thread_func *function, void *aux)
+tid_t thread_create(const char *name, int priority, thread_func *function, void *aux)
 {
 	struct thread *t;
 	tid_t tid;

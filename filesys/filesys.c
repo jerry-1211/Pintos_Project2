@@ -79,7 +79,12 @@ filesys_create (const char *name, off_t initial_size) {
  * or if an internal memory allocation fails. */
 struct file *
 filesys_open (const char *name) {
+	msg ("🐞 filesys_open : \"%s\"", name);
+	// filesys_init (/* format */ false);
 	struct dir *dir = dir_open_root ();
+	msg ("🐞 dir_open_root : \"%s\"", name);
+
+	
 	struct inode *inode = NULL;
 
 	if (dir != NULL)
