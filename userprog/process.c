@@ -179,6 +179,8 @@ int process_exec(void *f_name)
 	/* We cannot use the intr_frame in the thread structure.
 	 * This is because when current thread rescheduled,
 	 * it stores the execution information to the member. */
+	// 현재 우리가 실행하려는 것은 시스템 콜이 발생한 상황이 아니라 유저 프로그램을 실행시키는 상황이기 때문에
+	// UDSEG < 유저 데이터 세그먼트의 주소값, UCSEG < 유저 코드 세그먼트의 주소값으로 초기화를 시켜준다.
 	struct intr_frame _if;
 	_if.ds = _if.es = _if.ss = SEL_UDSEG;
 	_if.cs = SEL_UCSEG;
@@ -348,9 +350,9 @@ static bool
 load(const char *file_name, struct intr_frame *if_)
 {
 	struct thread *t = thread_current();
-	struct ELF ehdr;
-	struct file *file = NULL;
-	off_t file_ofs;
+	struct ELF ehdr;		  // 실행 파일의 전반적인 구조와 정보
+	struct file *file = NULL; // 실행 파일의 전반적인 정보를 저장 /관리
+	off_t file_ofs;			  // 프로그램 헤더 테이블의 시작지점
 	bool success = false;
 	int i;
 
@@ -369,6 +371,8 @@ load(const char *file_name, struct intr_frame *if_)
 	}
 
 	/* Allocate and activate page directory. */
+	// 새로운 페이지 디렉토리를 생성하고 현재 스레드에 할당
+	// 페이지 디렉토리는 가상 메모리와 물리 메모리를 매핑하는데 사용됨.
 	t->pml4 = pml4_create();
 	if (t->pml4 == NULL)
 		goto done;
@@ -449,10 +453,12 @@ load(const char *file_name, struct intr_frame *if_)
 	}
 
 	/* Set up stack. */
+	// 사용자 프로그램의 스택 공간을 확보
 	if (!setup_stack(if_))
 		goto done;
 
 	/* Start address. */
+	// 프로그램 실행을 시작해야하는 메모리의 주소. CPU가 실행을 시작할 위치
 	if_->rip = ehdr.e_entry;
 
 	/* TODO: Your code goes here.
