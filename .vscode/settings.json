@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "intr-stubs.h": "c",
-        "synch.h": "c"
+        "synch.h": "c",
+        "*.inc": "c"
     }
 }
