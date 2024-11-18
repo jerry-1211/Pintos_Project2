@@ -137,7 +137,7 @@ bool remove(const char *file)
 	}
 }
 
-int write(int fd, const void *buffer, unsinged size)
+int write(int fd, const void *buffer, unsigned size)
 {
 	if (fd == STDOUT_FILENO)
 		putbuf(buffer, size);
@@ -146,5 +146,5 @@ int write(int fd, const void *buffer, unsinged size)
 
 int open(const char *file)
 {
-	check_address(file)
+	check_address(file);
 }
