@@ -483,6 +483,7 @@ init_thread(struct thread *t, const char *name, int priority)
 	t->recent_cpu = RECENT_CPU_DEFAULT;
 
 	t->magic = THREAD_MAGIC;
+	t->exit_status = 0;
 
 	list_push_back(&all_list, &t->allelem);
 }

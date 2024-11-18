@@ -51,6 +51,9 @@ tid_t process_create_initd(const char *file_name)
 		return TID_ERROR;
 	strlcpy(fn_copy, file_name, PGSIZE);
 
+	char *token, *last;
+	token = strtok_r(file_name, " ", &last);
+
 	/* Create a new thread to execute FILE_NAME. */
 	tid = thread_create(file_name, PRI_DEFAULT, initd, fn_copy);
 	if (tid == TID_ERROR)
@@ -222,10 +225,11 @@ int process_wait(tid_t child_tid UNUSED)
 	/* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
-	while (1)
-	{
-	}
-
+	// while (1)
+	// {
+	// }
+	for (int i = 0; i < 100000000; i++)
+		;
 	return -1;
 }
 
