@@ -186,23 +186,27 @@ process_exec (void *f_name) {
 	/* We first kill the current context */
 	process_cleanup ();
 
-	/* --- Project 2: Command_line_parsing ---*/
-	memset(&_if, 0, sizeof _if);
-	/* --- Project 2: Command_line_parsing ---*/
 
 	/* And then load the binary */
 	printf("😈 load running \n");
 	success = load (file_name_copy, &_if);
 
+
+	printf("😂 finished load \n");
 	/* If load failed, quit. */
 	palloc_free_page (file_name);
 	if (!success)
 		return -1;
+	printf("😂 finished palloc \n");
 
-	hex_dump(_if.rsp, _if.rsp, KERN_BASE - _if.rsp, true);
+	 hex_dump(_if.rsp, _if.rsp, USER_STACK - (uint64_t)_if.rsp, true); 
+	// hex_dump(_if.rsp, _if.rsp, KERN_BASE - _if.rsp, true);
+	
+
 
 	/* Start switched process. */
 	do_iret (&_if);
+	printf("👽 finished do_iret \n");
 	NOT_REACHED ();
 }
 
@@ -221,9 +225,10 @@ process_wait (tid_t child_tid UNUSED) {
 	/* XXX: Hint) The pintos exit if process_wait (initd), we recommend you
 	 * XXX:       to add infinite loop here before
 	 * XXX:       implementing the process_wait. */
-	while(1){
-	}
-	return -1;
+	for (int i = 0; i < 1000000000; i++)
+  {
+  }
+  return -1;
 }
 
 /* Exit the process. This function is called by thread_exit (). */
@@ -372,7 +377,7 @@ load (const char *file_name, struct intr_frame *if_) {
 
 
 	for(int arg_i = 0 ; arg_i <token_count; arg_i++ ){
-		printf("🚨arg_list[%d] : %s \n",arg_i,arg_list[arg_i]);
+		printf("🚨arg_list[%d] : %s \n,",arg_i,arg_list[arg_i]);
 	}
 
 	/* Open executable file. */

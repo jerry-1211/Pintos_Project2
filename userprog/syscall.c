@@ -7,9 +7,13 @@
 #include "userprog/gdt.h"
 #include "threads/flags.h"
 #include "intrinsic.h"
+#include "userprog/syscall.h"
+
 
 void syscall_entry (void);
 void syscall_handler (struct intr_frame *);
+void halt(void);
+
 
 /* System call.
  *
@@ -38,9 +42,38 @@ syscall_init (void) {
 }
 
 /* The main system call interface */
-void
-syscall_handler (struct intr_frame *f UNUSED) {
-	// TODO: Your implementation goes here.
-	printf ("system call!\n");
-	thread_exit ();
+void syscall_handler(struct intr_frame *f UNUSED) {
+    int sys_number = f->R.rax;
+
+    // 레지스터에서 매개변수 꺼내오는 순서
+    // %rdi %rsi %rdx %r10 %r8 %r9
+
+    switch (sys_number) {
+        case SYS_HALT:
+            halt();
+            break;
+		case SYS_EXIT:
+            exit(f->R.rdi);
+            break;
+        default:
+            thread_exit ();
+    }
 }
+	
+
+void halt(void) {
+    power_off();
+}
+
+void exit(int status) {
+    struct thread *curr = thread_current();
+    curr->exit_status = status;
+
+    /** #Project 2: Process Termination Messages */
+    printf("%s: exit(%d)\n", curr->name, curr->exit_status);
+
+    thread_exit();
+}
+
+
+pintos --fs-disk=filesys.dsk -p tests/userprog/args-many:args-many -- -q

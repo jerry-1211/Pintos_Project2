@@ -273,11 +273,12 @@ run_actions (char **argv) {
 	/* Table of supported actions. */
 	static const struct action actions[] = {
 		{"run", 2, run_task},
+		{"put", 2, fsutil_put},
 #ifdef FILESYSs
 		{"ls", 1, fsutil_ls},
 		{"cat", 2, fsutil_cat},
 		{"rm", 2, fsutil_rm},
-		{"put", 2, fsutil_put},
+		
 		{"get", 2, fsutil_get},
 #endif
 		{NULL, 0, NULL},

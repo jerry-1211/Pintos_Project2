@@ -2,6 +2,8 @@
     "files.associations": {
         "intr-stubs.h": "c",
         "synch.h": "c",
-        "*.inc": "c"
+        "*.inc": "c",
+        "interrupt.h": "c",
+        "init.h": "c"
     }
 }

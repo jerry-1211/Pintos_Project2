@@ -187,10 +187,7 @@ void thread_print_stats(void)
    Priority scheduling is the goal of Problem 1-3. */
 void thread_test_preemption(void)
 {
-	if (!list_empty(&ready_list) && thread_current()->priority < list_entry(list_front(&ready_list), struct thread, elem)->priority){
-		if (intr_context())
-            intr_yield_on_return();
-        else
+	if (!intr_context() & !list_empty(&ready_list) && thread_current()->priority < list_entry(list_front(&ready_list), struct thread, elem)->priority){
 			thread_yield();
 	}
 		
