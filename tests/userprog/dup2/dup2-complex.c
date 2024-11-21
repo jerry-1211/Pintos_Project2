@@ -39,7 +39,7 @@ main (int argc UNUSED, char *argv[] UNUSED) {
   byte_cnt += read (fd2, buffer + byte_cnt, 10);
 
   CHECK (dup2 (fd2, fd3) > 1, "first dup2()");
-
+1
   byte_cnt += read (fd3, buffer + byte_cnt, 10);
 
   seek (fd1, 15);

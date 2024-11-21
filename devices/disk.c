@@ -552,3 +552,5 @@ register_disk_inspect_intr (void) {
 	intr_register_int (0x43, 3, INTR_OFF, inspect_read_cnt, "Inspect Disk Read Count");
 	intr_register_int (0x44, 3, INTR_OFF, inspect_write_cnt, "Inspect Disk Write Count");
 }
+
+

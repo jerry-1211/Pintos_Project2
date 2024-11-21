@@ -5,6 +5,10 @@
 #include <list.h>
 #include <stdint.h>
 #include "threads/interrupt.h"
+#include "threads/synch.h"
+#include "filesys/file.h"
+
+
 #ifdef VM
 #include "vm/vm.h"
 #endif
@@ -32,6 +36,9 @@ typedef int tid_t;
 #define NICE_DEFAULT 0
 #define RECENT_CPU_DEFAULT 0
 #define LOAD_AVG_DEFAULT 0
+
+#define FDT_PAGES 3 
+#define FDCOUNT_LIMIT FDT_PAGES * (1<<9) 
 
 /* A kernel thread or user process.
  *
@@ -107,11 +114,10 @@ struct thread
 	struct lock *wait_on_lock;		// 스레드가 현재 대기 중인 lock의 주소
 
 	int nice;
-	int recent_cpu;
+	int recent_cpu; 
 
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem; /* List element. */
-
 	struct list_elem allelem; /* List element. */
 
 #ifdef USERPROG
@@ -119,12 +125,22 @@ struct thread
 	uint64_t *pml4; /* Page map level 4 */
 	int exit_status;
 
+	int fd_idx; 
+	struct file **fdt;
+	struct file *runn_file;
+
+	struct intr_frame parent_if;
+	struct list child_list;
+	struct list_elem child_elem;
+
+	struct semaphore fork_sema;  // fork가 완료될 때 signal
+    struct semaphore exit_sema;  // 자식 프로세스 종료 signal
+    struct semaphore wait_sema;  // exit_sema를 기다릴 때 사용
 #endif
 #ifdef VM
 	/* Table for whole virtual memory owned by thread. */
 	struct supplemental_page_table spt;
 #endif
-
 	/* Owned by thread.c. */
 	struct intr_frame tf; /* Information for switching */
 	unsigned magic;		  /* Detects stack overflow. */
@@ -173,5 +189,8 @@ bool thread_compare_donate_priority(const struct list_elem *l, const struct list
 void donate_priority(void);
 void remove_with_lock(struct lock *lock);
 void refresh_priority(void);
+
+
+
 
 #endif /* threads/thread.h */

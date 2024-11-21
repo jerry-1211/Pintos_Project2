@@ -4,6 +4,15 @@
         "synch.h": "c",
         "*.inc": "c",
         "interrupt.h": "c",
-        "init.h": "c"
+        "init.h": "c",
+        "syscall.h": "c",
+        "malloc.h": "c",
+        "list.h": "c",
+        "stdbool.h": "c",
+        "process.h": "c",
+        "directory.h": "c",
+        "filesys.h": "c",
+        "stddef.h": "c",
+        "debug.h": "c"
     }
 }

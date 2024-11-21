@@ -1,4 +1,5 @@
-#ifndef INSTRINSIC_H
+#ifndef INTRINSIC_H
+#define INTRINSIC_H
 #include "threads/mmu.h"
 
 /* Store the physical address of the page directory into CR3

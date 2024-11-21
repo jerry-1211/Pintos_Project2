@@ -1,6 +1,7 @@
 #include <syscall.h>
 #include <stdint.h>
 #include "../syscall-nr.h"
+#include "lib/user/syscall.h"
 
 __attribute__((always_inline))
 static __inline int64_t syscall (uint64_t num_, uint64_t a1_, uint64_t a2_,
@@ -28,6 +29,7 @@ static __inline int64_t syscall (uint64_t num_, uint64_t a1_, uint64_t a2_,
 			: "cc", "memory");
 	return ret;
 }
+
 
 /* Invokes syscall NUMBER, passing no arguments, and returns the
    return value as an `int'. */
